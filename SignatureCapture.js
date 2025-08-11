@@ -1,15 +1,15 @@
 
 'use strict';
 
-var ReactNative = require('react-native');
-var React = require('react');
-var PropTypes = require('prop-types');
-var {
+import React from 'react';
+import PropTypes from 'prop-types';
+import {
     requireNativeComponent,
     View,
     UIManager,
-    DeviceEventEmitter
-} = ReactNative;
+    DeviceEventEmitter,
+    findNodeHandle
+} from 'react-native';
 
 class SignatureCapture extends React.Component {
 
@@ -73,7 +73,7 @@ class SignatureCapture extends React.Component {
 
     saveImage() {
         UIManager.dispatchViewManagerCommand(
-            ReactNative.findNodeHandle(this),
+            findNodeHandle(this),
             UIManager.getViewManagerConfig('RSSignatureView').Commands.saveImage,
             [],
         );
@@ -81,7 +81,7 @@ class SignatureCapture extends React.Component {
 
     resetImage() {
         UIManager.dispatchViewManagerCommand(
-            ReactNative.findNodeHandle(this),
+            findNodeHandle(this),
             UIManager.getViewManagerConfig('RSSignatureView').Commands.resetImage,
             [],
         );
@@ -108,4 +108,4 @@ var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture
     nativeOnly: { onChange: true }
 });
 
-module.exports = SignatureCapture;
+export default SignatureCapture;

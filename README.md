@@ -238,6 +238,51 @@ https://github.com/RepairShopr/react-native-signature-capture/tree/master/Exampl
 
 Library used:
 
+## Migration to React Native 0.80+
+
+### Version 0.5.0 Breaking Changes
+
+This version has been upgraded to support React Native 0.80+. The following changes have been made:
+
+#### JavaScript Changes
+- Updated to use ES6 imports instead of `require()`
+- Replaced deprecated `ReactNative.findNodeHandle()` with `findNodeHandle()`
+- Updated export syntax from `module.exports` to `export default`
+
+#### Native Changes
+
+**iOS:**
+- Updated minimum iOS version to 12.4
+- Replaced deprecated `RCTEventDispatcher` with direct event callbacks
+- Updated podspec to use `React-Core` dependency
+
+**Android:**
+- Updated `compileSdkVersion` to 34
+- Updated `minSdkVersion` to 21  
+- Updated `targetSdkVersion` to 34
+- Migrated from Android Support Library to AndroidX
+- Updated Java compilation to version 11
+- Removed deprecated `com.facebook.infer.annotation.Assertions`
+
+#### Compatibility
+- **Minimum React Native version:** 0.80.0
+- **Minimum iOS version:** 12.4
+- **Minimum Android API level:** 21
+
+### Upgrading Your Project
+
+1. Update your React Native version to 0.80 or higher
+2. Update the import statement in your code:
+   ```javascript
+   // Old
+   import SignatureCapture from 'react-native-signature-capture';
+   
+   // Still works (no change needed)
+   import SignatureCapture from 'react-native-signature-capture';
+   ```
+3. For iOS: Run `cd ios && pod install` to update native dependencies
+4. For Android: Clean and rebuild your project
+
 https://github.com/jharwig/PPSSignatureView
 
 https://github.com/gcacace/android-signaturepad

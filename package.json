@@ -1,35 +1,36 @@
 {
   "name": "react-native-signature-capture",
-  "version": "0.4.11",
-  "description": "Lets users sign their signatures",
+  "version": "1.0.0",
+  "description": "Lets users sign their signatures (but now they can do it on a phone that isnt from 1983",
   "main": "SignatureCapture.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/RepairShopr/react-native-signature-capture.git"
+    "url": "git+https://github.com/MathewWaller/react-native-signature-capture"
   },
   "keywords": [
     "react-component",
     "react-native",
     "ios",
-    "signature"
+    "signature",
+    "culverdocs"
   ],
   "peerDependencies": {
-    "react-native": ">=0.47"
+    "react-native": ">=0.80.0"
   },
   "author": "RepairShopr",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/RepairShopr/react-native-signature-capture/issues"
+    "url": "https://github.com/MathewWaller/react-native-signature-capture/issues"
   },
-  "homepage": "https://github.com/RepairShopr/react-native-signature-capture#readme",
+  "homepage": "https://github.com/MathewWaller/react-native-signature-capture",
   "dependencies": {
     "prop-types": "^15.5.10"
   },
   "devDependencies": {
-    "react": "16.13.1",
-    "react-native": "0.63.2"
+    "react": "18.2.0",
+    "react-native": "0.80.0"
   }
 }

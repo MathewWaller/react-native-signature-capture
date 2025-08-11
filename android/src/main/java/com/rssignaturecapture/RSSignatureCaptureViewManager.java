@@ -3,7 +3,6 @@ package com.rssignaturecapture;
 import android.util.Log;
 import android.graphics.Color;
 
-import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
@@ -135,8 +134,9 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 			RSSignatureCaptureMainView view,
 			int commandType,
 			@Nullable ReadableArray args) {
-		Assertions.assertNotNull(view);
-		Assertions.assertNotNull(args);
+		if (view == null || args == null) {
+			return;
+		}
 		switch (commandType) {
 			case COMMAND_SAVE_IMAGE: {
 				view.saveImage();

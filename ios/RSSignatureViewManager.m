@@ -1,7 +1,7 @@
 #import "RSSignatureViewManager.h"
 #import <React/RCTBridgeModule.h>
 #import <React/RCTBridge.h>
-#import <React/RCTEventDispatcher.h>
+#import <React/RCTEventEmitter.h>
 
 @implementation RSSignatureViewManager
 
@@ -17,6 +17,7 @@ RCT_EXPORT_VIEW_PROPERTY(showNativeButtons, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showTitleLabel, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(backgroundColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(strokeColor, UIColor)
+RCT_EXPORT_VIEW_PROPERTY(onChange, RCTDirectEventBlock)
 
 
 -(dispatch_queue_t) methodQueue
@@ -46,18 +47,18 @@ RCT_EXPORT_METHOD(resetImage:(nonnull NSNumber *)reactTag) {
 }
 
 -(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded {
-	[self.bridge.eventDispatcher
-	 sendDeviceEventWithName:@"onSaveEvent"
-	 body:@{
-					@"pathName": aTempPath,
-					@"encoded": aEncoded
-					}];
+	if (self.signView.onChange) {
+		self.signView.onChange(@{
+			@"pathName": aTempPath,
+			@"encoded": aEncoded
+		});
+	}
 }
 
 -(void) publishDraggedEvent {
-	[self.bridge.eventDispatcher
-	 sendDeviceEventWithName:@"onDragEvent"
-	 body:@{@"dragged": @YES}];
+	if (self.signView.onChange) {
+		self.signView.onChange(@{@"dragged": @YES});
+	}
 }
 
 @end
