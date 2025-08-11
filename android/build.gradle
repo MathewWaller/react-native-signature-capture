@@ -51,26 +51,30 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${safeExtGet('androidxAppCompatVersion', '1.6.1')}"
 }
 
-// Fix for the specific Gradle task dependency issue
-gradle.taskGraph.whenReady { taskGraph ->
-    taskGraph.allTasks.each { task ->
-        // Handle both project naming conventions
-        if (task.path.contains('reactnativesignaturecapture') && task.name.contains('packageDebugResources')) {
-            def generateTask = taskGraph.allTasks.find { 
-                (it.path.contains('react-native-signature-capture') || it.path.contains('reactnativesignaturecapture')) && 
-                it.name == 'generateDebugResValues' 
-            }
-            if (generateTask) {
-                task.dependsOn generateTask
-            }
-        }
-        if (task.path.contains('reactnativesignaturecapture') && task.name.contains('packageReleaseResources')) {
-            def generateTask = taskGraph.allTasks.find { 
-                (it.path.contains('react-native-signature-capture') || it.path.contains('reactnativesignaturecapture')) && 
-                it.name == 'generateReleaseResValues' 
-            }
-            if (generateTask) {
-                task.dependsOn generateTask
+// Ensure proper task ordering for resource generation
+afterEvaluate {
+    tasks.withType(com.android.build.gradle.internal.tasks.MergeResources).configureEach { task ->
+        task.dependsOn tasks.withType(com.android.build.gradle.tasks.GenerateResValues)
+    }
+}
+
+// Additional fix for cross-project task dependencies
+gradle.projectsEvaluated {
+    rootProject.allprojects { project ->
+        project.tasks.withType(com.android.build.gradle.internal.tasks.MergeResources).configureEach { mergeTask ->
+            if (mergeTask.path.contains('reactnativesignaturecapture')) {
+                rootProject.allprojects { otherProject ->
+                    otherProject.tasks.withType(com.android.build.gradle.tasks.GenerateResValues).configureEach { generateTask ->
+                        if (generateTask.path.contains('react-native-signature-capture')) {
+                            // Match variants (debug/release)
+                            def mergeVariant = mergeTask.name.replaceAll('package|Resources', '').toLowerCase()
+                            def generateVariant = generateTask.name.replaceAll('generate|ResValues', '').toLowerCase()
+                            if (mergeVariant == generateVariant) {
+                                mergeTask.dependsOn generateTask
+                            }
+                        }
+                    }
+                }
             }
         }
     }

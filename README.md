@@ -292,7 +292,9 @@ If you encounter Gradle task dependency errors like:
 Task ':reactnativesignaturecapture:packageDebugResources' uses this output of task ':react-native-signature-capture:generateDebugResValues' without declaring an explicit or implicit dependency.
 ```
 
-**Solution:**
+**Quick Solution:** See [ANDROID_BUILD_FIX.md](./ANDROID_BUILD_FIX.md) for detailed instructions.
+
+**Or try these steps:**
 1. Clean your project: `cd android && ./gradlew clean`
 2. Delete `node_modules` and reinstall: `rm -rf node_modules && npm install`
 3. For React Native projects, also clean Metro cache: `npx react-native start --reset-cache`
