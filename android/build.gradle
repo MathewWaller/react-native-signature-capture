@@ -51,8 +51,27 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${safeExtGet('androidxAppCompatVersion', '1.6.1')}"
 }
 
-tasks.whenTaskAdded { task ->
-    if (task.name.startsWith('package') && task.name.endsWith('Resources')) {
-        task.dependsOn tasks.matching { it.name.startsWith('generate') && it.name.endsWith('ResValues') }
+// Fix for the specific Gradle task dependency issue
+gradle.taskGraph.whenReady { taskGraph ->
+    taskGraph.allTasks.each { task ->
+        // Handle both project naming conventions
+        if (task.path.contains('reactnativesignaturecapture') && task.name.contains('packageDebugResources')) {
+            def generateTask = taskGraph.allTasks.find { 
+                (it.path.contains('react-native-signature-capture') || it.path.contains('reactnativesignaturecapture')) && 
+                it.name == 'generateDebugResValues' 
+            }
+            if (generateTask) {
+                task.dependsOn generateTask
+            }
+        }
+        if (task.path.contains('reactnativesignaturecapture') && task.name.contains('packageReleaseResources')) {
+            def generateTask = taskGraph.allTasks.find { 
+                (it.path.contains('react-native-signature-capture') || it.path.contains('reactnativesignaturecapture')) && 
+                it.name == 'generateReleaseResValues' 
+            }
+            if (generateTask) {
+                task.dependsOn generateTask
+            }
+        }
     }
 }
