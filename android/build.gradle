@@ -4,9 +4,14 @@ def safeExtGet(prop, fallback) {
 
 apply plugin: 'com.android.library'
 
+def isNewArchitectureEnabled() {
+    return rootProject.hasProperty("newArchEnabled") && rootProject.getProperty("newArchEnabled") == "true"
+}
+
 android {
     compileSdkVersion safeExtGet('compileSdkVersion', 34)
-    buildToolsVersion safeExtGet('buildToolsVersion', "34.0.0")
+    
+    namespace 'com.rssignaturecapture'
 
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', 21)
@@ -19,9 +24,35 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+    
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    
+    lintOptions {
+        disable 'GradleCompatible'
+    }
+    
+    packagingOptions {
+        pickFirst '**/libc++_shared.so'
+        pickFirst '**/libjsc.so'
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
 }
 
 dependencies {
+    implementation 'com.facebook.react:react-native:+'
     implementation "androidx.appcompat:appcompat:${safeExtGet('androidxAppCompatVersion', '1.6.1')}"
-    implementation "com.facebook.react:react-native:+"
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith('package') && task.name.endsWith('Resources')) {
+        task.dependsOn tasks.matching { it.name.startsWith('generate') && it.name.endsWith('ResValues') }
+    }
 }
