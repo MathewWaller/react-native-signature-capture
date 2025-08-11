@@ -51,31 +51,26 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${safeExtGet('androidxAppCompatVersion', '1.6.1')}"
 }
 
-// Ensure proper task ordering for resource generation
-afterEvaluate {
-    tasks.withType(com.android.build.gradle.internal.tasks.MergeResources).configureEach { task ->
-        task.dependsOn tasks.withType(com.android.build.gradle.tasks.GenerateResValues)
-    }
-}
-
-// Additional fix for cross-project task dependencies
-gradle.projectsEvaluated {
-    rootProject.allprojects { project ->
-        project.tasks.withType(com.android.build.gradle.internal.tasks.MergeResources).configureEach { mergeTask ->
-            if (mergeTask.path.contains('reactnativesignaturecapture')) {
-                rootProject.allprojects { otherProject ->
-                    otherProject.tasks.withType(com.android.build.gradle.tasks.GenerateResValues).configureEach { generateTask ->
-                        if (generateTask.path.contains('react-native-signature-capture')) {
-                            // Match variants (debug/release)
-                            def mergeVariant = mergeTask.name.replaceAll('package|Resources', '').toLowerCase()
-                            def generateVariant = generateTask.name.replaceAll('generate|ResValues', '').toLowerCase()
-                            if (mergeVariant == generateVariant) {
-                                mergeTask.dependsOn generateTask
-                            }
-                        }
-                    }
+// Fix for Gradle task dependency issues using a safer approach
+afterEvaluate { project ->
+    // Define task dependency patterns
+    def addTaskDependencies = { ->
+        project.tasks.matching { it.name.contains('package') && it.name.contains('Resources') }.all { packageTask ->
+            project.tasks.matching { it.name.contains('generate') && it.name.contains('ResValues') }.all { generateTask ->
+                // Match variants (debug/release)
+                def packageVariant = packageTask.name.replaceAll('package|Resources', '').toLowerCase()
+                def generateVariant = generateTask.name.replaceAll('generate|ResValues', '').toLowerCase()
+                
+                if (packageVariant == generateVariant) {
+                    packageTask.dependsOn generateTask
                 }
             }
         }
     }
+    
+    // Apply the dependencies
+    addTaskDependencies()
+    
+    // Also apply when tasks are added later
+    project.tasks.whenTaskAdded { addTaskDependencies() }
 }
