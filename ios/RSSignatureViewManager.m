@@ -24,20 +24,6 @@ RCT_EXPORT_VIEW_PROPERTY(onChange, RCTDirectEventBlock)
     return YES;
 }
 
-- (NSArray<NSString *> *)supportedEvents
-{
-    return @[@"topChange"];
-}
-
-+ (NSDictionary *)exportedCustomDirectEventTypes
-{
-    return @{
-        @"topChange": @{
-            @"registrationName": @"onChange"
-        }
-    };
-}
-
 -(dispatch_queue_t) methodQueue
 {
 	return dispatch_get_main_queue();
