@@ -19,6 +19,24 @@ RCT_EXPORT_VIEW_PROPERTY(backgroundColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(strokeColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(onChange, RCTDirectEventBlock)
 
++ (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
+- (NSArray<NSString *> *)supportedEvents
+{
+    return @[@"topChange"];
+}
+
++ (NSDictionary *)exportedCustomDirectEventTypes
+{
+    return @{
+        @"topChange": @{
+            @"registrationName": @"onChange"
+        }
+    };
+}
 
 -(dispatch_queue_t) methodQueue
 {
