@@ -8,7 +8,7 @@
 @interface RSSignatureView : RCTView
 @property (nonatomic, strong) PPSSignatureView *sign;
 @property (nonatomic, strong) RSSignatureViewManager *manager;
-@property (nonatomic, copy) RCTDirectEventBlock onChange;
+@property (nonatomic, copy) RCTDirectEventBlock onSignatureChange;
 -(void) onSaveButtonPressed;
 -(void) onClearButtonPressed;
 -(void) saveImage;

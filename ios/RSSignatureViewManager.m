@@ -17,7 +17,7 @@ RCT_EXPORT_VIEW_PROPERTY(showNativeButtons, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(showTitleLabel, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(backgroundColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(strokeColor, UIColor)
-RCT_EXPORT_VIEW_PROPERTY(onChange, RCTDirectEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onSignatureChange, RCTDirectEventBlock)
 
 + (BOOL)requiresMainQueueSetup
 {
@@ -51,8 +51,8 @@ RCT_EXPORT_METHOD(resetImage:(nonnull NSNumber *)reactTag) {
 }
 
 -(void) publishSaveImageEvent:(NSString *) aTempPath withEncoded: (NSString *) aEncoded {
-	if (self.signView.onChange) {
-		self.signView.onChange(@{
+	if (self.signView.onSignatureChange) {
+		self.signView.onSignatureChange(@{
 			@"pathName": aTempPath,
 			@"encoded": aEncoded
 		});
@@ -60,8 +60,8 @@ RCT_EXPORT_METHOD(resetImage:(nonnull NSNumber *)reactTag) {
 }
 
 -(void) publishDraggedEvent {
-	if (self.signView.onChange) {
-		self.signView.onChange(@{@"dragged": @YES});
+	if (self.signView.onSignatureChange) {
+		self.signView.onSignatureChange(@{@"dragged": @YES});
 	}
 }
 

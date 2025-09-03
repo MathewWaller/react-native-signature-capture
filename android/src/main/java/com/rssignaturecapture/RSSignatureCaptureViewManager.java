@@ -132,7 +132,7 @@ public class RSSignatureCaptureViewManager extends ViewGroupManager<RSSignatureC
 	@Override
 	public Map getExportedCustomDirectEventTypeConstants() {
 		return MapBuilder.of(
-				"onTopChange", MapBuilder.of("registrationName", "onChange")
+				"topSignatureChange", MapBuilder.of("registrationName", "onSignatureChange")
 		);
 	}
 

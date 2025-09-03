@@ -15,11 +15,11 @@ class SignatureCapture extends React.Component {
 
     constructor() {
         super();
-        this.onChange = this.onChange.bind(this);
+        this.onSignatureChange = this.onSignatureChange.bind(this);
         this.subscriptions = [];
     }
 
-    onChange(event) {
+    onSignatureChange(event) {
 
         if(event.nativeEvent.pathName){
 
@@ -67,7 +67,7 @@ class SignatureCapture extends React.Component {
 
     render() {
         return (
-            <RSSignatureView {...this.props} onChange={this.onChange} />
+            <RSSignatureView {...this.props} onSignatureChange={this.onSignatureChange}></RSSignatureView>
         );
     }
 
@@ -104,8 +104,6 @@ SignatureCapture.propTypes = {
     backgroundColor: PropTypes.string
 };
 
-var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture, {
-    nativeOnly: { onChange: true }
-});
+var RSSignatureView = requireNativeComponent('RSSignatureView', SignatureCapture);
 
 export default SignatureCapture;
